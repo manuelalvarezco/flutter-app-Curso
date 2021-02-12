@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 class InputPage extends StatefulWidget {
-  InputPage({Key key}) : super(key: key);
 
   @override
   _InputPageState createState() => _InputPageState();
@@ -15,6 +14,9 @@ class _InputPageState extends State<InputPage> {
 
   String _date = '';
   TextEditingController _inputFieldDateController = new TextEditingController();
+
+  List<String> _powers = [ 'Volar', 'Rayos X', 'Fuerza'];
+  String _powerSelected = 'Volar';
 
   @override
   Widget build(BuildContext context) {
@@ -32,6 +34,8 @@ class _InputPageState extends State<InputPage> {
           _createInputPassword(),
           Divider(),
           _createInputDatePicker(context),
+          Divider(),
+          _createInputDropdown(),
           Divider(),
           _infoPerson()
         ],
@@ -142,15 +146,51 @@ _selectDate(BuildContext context) async{
   }
 }
 
+Widget _createInputDropdown() {
+  return Row(
+    children: [
+      Icon(Icons.select_all),
+      SizedBox(width: 30.0,),
+      Expanded(
+        child: DropdownButton(
+          value: _powerSelected,
+          items: getOptionsMenuDropdown(),
+          onChanged: (opt){
+            setState(() {
+              _powerSelected = opt;
+            });
+          },
+          ),
+      )
+    ],
+  );
+  
+  
+}
+
+
+List<DropdownMenuItem<String>> getOptionsMenuDropdown(){
+
+  List<DropdownMenuItem<String>> list = [];
+
+  _powers.forEach( (power){
+    list.add( DropdownMenuItem(
+      child: Text(power),
+      value: power,
+    ));
+  });
+
+  return list;
+}
 
 
 Widget _infoPerson() {
     return ListTile(
       title: Text('Nombre es $_name'),
       subtitle: Text('Correo electrónico $_email'),
+      trailing: Text(_powerSelected),
     );
   }
-
 
 
   
